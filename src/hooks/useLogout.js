@@ -1,8 +1,9 @@
 import { auth } from "../firebase/config.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {useAuthContext} from './useAuthContext'
 
 const useLogout = () => {
+const [isCancelled, setIsCancelled] = useState(false);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const {dispatch} = useAuthContext()
@@ -24,14 +25,27 @@ const useLogout = () => {
       // dispatch action to update logout local state 
       dispatch({type:'LOGOUT'})
 
-      setIsLoading(false);
+      if(!isCancelled){
+    setIsLoading(false);
       setError(null);
+      }
+
+      
     } catch (err) {
     console.log(err.message);
+    if(!isCancelled){
       setError(err.message);
       setIsLoading(false);
     }
+
+    }
   };
+
+  useEffect(() => {
+      return () => {
+          setIsCancelled(true)
+      }
+  }, [])
 
   return {
     error,
