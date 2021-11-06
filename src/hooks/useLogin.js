@@ -22,6 +22,7 @@ const [isCancelled, setIsCancelled] = useState(false);
         throw new Error("Something went wrong!");
       }
 
+    console.log(response.user);
       // dispatch action to update login user local state 
       dispatch({type:'LOGIN', payload: response.user})
 

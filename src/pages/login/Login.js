@@ -1,17 +1,16 @@
 import React from "react";
 import { useState } from "react";
-import { useAuthContext } from "../../hooks/useAuthContext";
 import classes from "./Login.module.css";
+import useLogin from "../../hooks/useLogin";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { state, dispatch } = useAuthContext();
+  const { login, isLoading, error } = useLogin();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(email, password);
-
+    login(email, password);
   };
 
   return (
@@ -35,9 +34,19 @@ export default function Login() {
           />
         </label>
 
-        <button type="submit" className="btn">
-          Login
-        </button>
+        {!isLoading && (
+          <button type="submit" className="btn">
+            Login
+          </button>
+        )}
+
+        {isLoading && (
+          <button type="submit" className="btn" disabled>
+            Logging In..
+          </button>
+        )}
+
+        {error && <p>{error}</p>}
       </form>
     </>
   );
