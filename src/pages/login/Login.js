@@ -1,33 +1,43 @@
 import React from "react";
 import { useState } from "react";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import classes from "./Login.module.css";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { state, dispatch } = useAuthContext();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(email, password);
+
   };
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={classes["login-form"]}>
         <label>
-          <label>Email</label>
+          <span>Email</span>
           <input
             type="email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
           />
-          <label>Password</label>
+        </label>
+
+        <label>
+          <span>Password</span>
           <input
             type="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />
-          <button type="submit">Login</button>
         </label>
+
+        <button type="submit" className="btn">
+          Login
+        </button>
       </form>
     </>
   );

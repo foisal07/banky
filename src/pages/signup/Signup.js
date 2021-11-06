@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import useSignup from "../../hooks/useSignup";
+import classes from "./Signup.module.css";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -15,7 +16,7 @@ export default function Login() {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={classes["signup-form"]}>
         <label>
           <span>Name</span>
           <input
@@ -43,9 +44,17 @@ export default function Login() {
           />
         </label>
 
-        {!isLoading && <button type="submit">Login</button>}
-        {error && <p>`${error.message}`</p>}
-        {isLoading && <button type="submit">Loading</button>}
+        {!isLoading && (
+          <button type="submit" className="btn">
+            Signup
+          </button>
+        )}
+        {error && <p>{error}</p>}
+        {isLoading && (
+          <button type="submit" className="btn">
+            Loading
+          </button>
+        )}
       </form>
     </>
   );

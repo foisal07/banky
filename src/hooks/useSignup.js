@@ -1,9 +1,12 @@
 import { auth } from "../firebase/config.js";
 import { useState } from "react";
+import {useAuthContext} from './useAuthContext'
 
 const useSignup = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const {dispatch} = useAuthContext()
+
 
   const signup = async (email, password, displayName) => {
     // remove previous error
@@ -17,19 +20,21 @@ const useSignup = () => {
         password
       );
 
-      console.log(response.user);
-
       if (!response) {
-        throw new Error('Couldnt create an account');
+        throw new Error("Couldnt create an account");
       }
 
       // add display name to user
       await response.user.updateProfile({ displayName });
 
+      // dispatch action to login the user
+      dispatch({type:'LOGIN', payload: response.user})
+
       setIsLoading(false);
       setError(null);
-    } catch (error) {
-      setError(error.message);
+    } catch (err) {
+    console.log(err.message);
+      setError(err.message);
       setIsLoading(false);
     }
   };
