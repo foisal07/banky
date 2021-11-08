@@ -1,10 +1,9 @@
 import React from "react";
-import Login from "../login/Login";
 
 export default function Home() {
   return (
     <>
-      <Login />
+      <h1>Welcome!</h1>
     </>
   );
 }
