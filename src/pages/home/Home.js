@@ -9,7 +9,11 @@ import useCollections from "../../hooks/useCollections";
 
 export default function Home() {
   const { user } = useAuthContext();
-  const { documents, error } = useCollections('transactions');
+  const { documents, error } = useCollections("transactions", [
+    "uid",
+    "==",
+    user.uid,
+  ]);
 
   return (
     <>
