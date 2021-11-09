@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useReducer } from "react";
 import { firestore } from "../firebase/config";
 
@@ -37,9 +37,16 @@ const firestoreReducer = (state, action) => {
 
 export default function useFirestore(collectionName) {
   const [response, dispatch] = useReducer(firestoreReducer, initialState);
+  const [isCancelled, setIsCancelled] = useState(null);
 
   // create collection ref
   const collectionRef = firestore.collection(collectionName);
+
+  const dispatchIfNotCancelled = (action) => {
+    if (!isCancelled) {
+      dispatch(action);
+    }
+  };
 
   // add a collection to firestore
   const addDocument = async (doc) => {
@@ -47,9 +54,9 @@ export default function useFirestore(collectionName) {
 
     try {
       const addedDocument = await collectionRef.add({ ...doc });
-      dispatch({ type: "ADD_DOCUMENT", payload: doc });
+      dispatchIfNotCancelled({ type: "ADD_DOCUMENT", payload: doc });
     } catch (err) {
-      dispatch({ type: "ERROR", payload: err.message });
+      dispatchIfNotCancelled({ type: "ERROR", payload: err.message });
     }
   };
 
