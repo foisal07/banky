@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import useFirestore from "../../hooks/useFirestore";
 
-export default function TransactionForm() {
+export default function TransactionForm({ uid }) {
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
 
@@ -12,6 +12,7 @@ export default function TransactionForm() {
     e.preventDefault();
 
     addDocument({
+      uid,
       name,
       amount,
     });
