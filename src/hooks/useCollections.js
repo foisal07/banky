@@ -12,7 +12,6 @@ export default function useCollections(collection) {
       (snapshot) => {
         let results = [];
         snapshot.docs.forEach((doc) => {
-        console.log(doc);
           results.push({ ...doc.data(), id: doc.id });
         });
         setDocuments(results);
