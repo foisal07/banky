@@ -32,6 +32,15 @@ const firestoreReducer = (state, action) => {
     };
   }
 
+  if (action.type === "ADD_DOCUMENT") {
+    return {
+      document: null,
+      isLoading: false,
+      error: action.payload,
+      success: true,
+    };
+  }
+
   return state;
 };
 
@@ -56,14 +65,21 @@ export default function useFirestore(collectionName) {
       const createdAt = timestamp.fromDate(new Date());
       const addedDocument = await collectionRef.add({ ...doc, createdAt });
       dispatchIfNotCancelled({ type: "ADD_DOCUMENT", payload: doc });
-    } 
-    catch (err) {
+    } catch (err) {
       dispatchIfNotCancelled({ type: "ERROR", payload: err.message });
     }
   };
 
   // delete a collection from firestore
-  const deleteDocument = () => {};
+  const deleteDocument = async (id) => {
+    dispatch({ type: "IS_LOADING" });
+    try {
+      await collectionRef.doc(id).delete();
+      dispatchIfNotCancelled({ type: "DELETE_DOCUMENT" });
+    } catch (err) {
+      dispatchIfNotCancelled({ type: "ERROR", payload: "could not delete" });
+    }
+  };
 
   return { addDocument, deleteDocument, response };
 }
