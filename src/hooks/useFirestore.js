@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useReducer } from "react";
-import { firestore } from "../firebase/config";
+import { firestore, timestamp } from "../firebase/config";
 
 const initialState = {
   document: null,
@@ -53,9 +53,11 @@ export default function useFirestore(collectionName) {
     dispatch({ type: "IS_LOADING" });
 
     try {
-      const addedDocument = await collectionRef.add({ ...doc });
+      const createdAt = timestamp.fromDate(new Date());
+      const addedDocument = await collectionRef.add({ ...doc, createdAt });
       dispatchIfNotCancelled({ type: "ADD_DOCUMENT", payload: doc });
-    } catch (err) {
+    } 
+    catch (err) {
       dispatchIfNotCancelled({ type: "ERROR", payload: err.message });
     }
   };
